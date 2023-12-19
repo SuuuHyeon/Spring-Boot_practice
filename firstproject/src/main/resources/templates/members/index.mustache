@@ -1,0 +1,20 @@
+{{>layouts/header}}
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">-</th>
+        <th scope="col">email</th>
+        <th scope="col">password</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{#memberEntityList}}
+        <tr>
+            <th>{{id}}</th>
+            <td>{{email}}</td>
+            <td>{{password}}</td>
+        </tr>
+    {{/memberEntityList}}
+    </tbody>
+</table>
+{{>layouts/footer}}
