@@ -8,14 +8,15 @@
     </tr>
     </thead>
     <tbody>
-    {{#memberEntityList}}
+    {{#member}}
         <tr>
             <th>{{id}}</th>
-            <td><a href="/members/{{id}}">{{email}}</a></td>
+            <td>{{email}}</td>
             <td>{{password}}</td>
         </tr>
-    {{/memberEntityList}}
+    {{/member}}
     </tbody>
 </table>
-<a href="/members/signUp">회원가입</a>
+<a href="/members/{{member.id}}/edit">수정하기</a>
+<a href="/members">회원 리스트</a>
 {{>layouts/footer}}

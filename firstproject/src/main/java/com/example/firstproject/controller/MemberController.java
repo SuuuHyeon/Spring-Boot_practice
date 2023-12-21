@@ -1,6 +1,7 @@
 package com.example.firstproject.controller;
 
 import com.example.firstproject.dto.MemberForm;
+import com.example.firstproject.entity.Article;
 import com.example.firstproject.entity.Member;
 import com.example.firstproject.repository.MemberRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +29,7 @@ public class MemberController {
         log.info("member엔티티 : " + member.toString());
         Member saved = memberRepository.save(member);
         log.info("DB변환 : " + saved);
-        return "";
+        return "redirect:/members/" + saved.getId();
     }
 
     @GetMapping("/members/{id}")
@@ -36,7 +37,7 @@ public class MemberController {
         Member memberEntity = memberRepository.findById(id).orElse(null);
         model.addAttribute("member", memberEntity);
         log.info("memberEntity : " + memberEntity);
-        return "members/show";
+        return "members/new";
     }
 
     @GetMapping("/members")
@@ -45,5 +46,22 @@ public class MemberController {
         model.addAttribute("memberEntityList", memberEntityList);
         log.info("modelEntityList : " + memberEntityList.toString());
         return "members/index";
+    }
+
+    @GetMapping("/members/{id}/edit")
+    public String edit(@PathVariable Long id, Model model) {
+        Member memberEntity = memberRepository.findById(id).orElse(null);
+        model.addAttribute("member", memberEntity);
+        return "members/edit";
+    }
+
+    @PostMapping("/members/update")
+    public String update(MemberForm form) {
+        Member memberEntity = form.toEntity();
+        Member target = memberRepository.findById(memberEntity.getId()).orElse(null);
+        if (target != null) {
+            memberRepository.save(memberEntity);
+        }
+        return "redirect:/members/" + memberEntity.getId();
     }
 }

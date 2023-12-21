@@ -4,7 +4,7 @@
     <tr>
         <th scope="col">ID</th>
         <th scope="col">title</th>
-        <th scope="col">conrenr</th>
+        <th scope="col">content</th>
     </tr>
     </thead>
     <tbody>
@@ -17,4 +17,6 @@
     {{/article}}
     </tbody>
 </table>
+<a href="/articles/{{article.id}}/edit" class="btn btn-primary">Edit</a>
+<a href="/articles">Article List</a>
 {{>layouts/footer}}

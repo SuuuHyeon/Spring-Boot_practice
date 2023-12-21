@@ -33,7 +33,7 @@ public class ArticleController {
         Article saved = articleRepository.save(article);
         log.info(saved.toString());
 //        System.out.println("article을 DB로 변환" + saved.toString());
-        return "";
+        return "redirect:/articles/" + saved.getId();
     }
 
     @GetMapping("/articles/{id}")
@@ -56,5 +56,28 @@ public class ArticleController {
         return "articles/index";
     }
 
+    @GetMapping("/articles/{id}/edit")
+    public String edit(@PathVariable Long id, Model model) {
+        // 수정할 데이터 가져오기
+        Article articleEntity = articleRepository.findById(id).orElse(null);
+        // 모델에 데이터 등록
+        model.addAttribute("article", articleEntity);
+        return "articles/edit";
+    }
 
+    @PostMapping("/articles/update")
+    public String update(ArticleForm form) { // 수정 폼에서 전송한 데이터를 DTO로 받으니 매개변수로 받기
+        log.info(form.toString());
+        // 1. DTO 엔티티로 변환
+        Article articleEntity = form.toEntity();
+        // 2. 엔티티 DB에 저장
+        // 2-1 DB에서 기존 데이터 가져오기
+        Article target = articleRepository.findById(articleEntity.getId()).orElse(null); // 엔티티에서 게터로 가져오기
+        // 2-2 데이터 갱신
+        if (target != null) {
+            articleRepository.save(articleEntity);
+        }
+        // 3. 수정결과 페이지 리다이렉트
+        return "redirect:/articles/" + articleEntity.getId();
+    }
 }
