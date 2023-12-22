@@ -1,7 +1,6 @@
 package com.example.firstproject.controller;
 
 import com.example.firstproject.dto.MemberForm;
-import com.example.firstproject.entity.Article;
 import com.example.firstproject.entity.Member;
 import com.example.firstproject.repository.MemberRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
 
@@ -37,7 +37,7 @@ public class MemberController {
         Member memberEntity = memberRepository.findById(id).orElse(null);
         model.addAttribute("member", memberEntity);
         log.info("memberEntity : " + memberEntity);
-        return "members/new";
+        return "members/show";
     }
 
     @GetMapping("/members")
@@ -63,5 +63,15 @@ public class MemberController {
             memberRepository.save(memberEntity);
         }
         return "redirect:/members/" + memberEntity.getId();
+    }
+
+    @GetMapping("/members/{id}/delete")
+    public String delete(@PathVariable Long id, RedirectAttributes attr) {
+        Member target = memberRepository.findById(id).orElse(null);
+        if (target != null) {
+            memberRepository.delete(target);
+            attr.addFlashAttribute("msg", "삭제가 완료되었습니다.");
+        }
+        return "redirect:/members";
     }
 }
